@@ -3,7 +3,8 @@ import './styles/main.css';
 import { initRouter } from './router';
 import './views/home'; // ensure modules baked in
 import registerSW from '../registerServiceWorker';
-import { registerPushNotification } from '../registerNotification';
+import { subscribeUser, unsubscribeUser } from '../registerNotification';
+
 
 // init app
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,5 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // initial render
   if (!location.hash) location.hash = '/';
   registerSW()
-  registerPushNotification()
+
+  const token = localStorage.getItem('token')
+  if(token){
+    subscribeUser() 
+  } else{
+    unsubscribeUser()
+  }
 });

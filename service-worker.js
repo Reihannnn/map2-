@@ -16,19 +16,10 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-  console.log("🔥 Push diterima:", event.data?.text());
-
-  let data = {};
-  try {
-    data = event.data.json();
-  } catch {
-    data = { title: "Story Baru!", body: "Ada story baru ditambahkan!" };
+  const data = event.data.json()
+  const options = {
+    body : data.options.body
   }
 
-  const title = data.title || "Story Berhasil Dipost 🎉";
-  const options = {
-    body: data.body,
-  };
-
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });

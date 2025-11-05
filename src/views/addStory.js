@@ -1,4 +1,4 @@
-import { postStory } from '../utils/api';
+import { apiPostStory } from '../utils/api';
 import { showLocalNotification } from '../utils/showNotification';
 
 export default function AddStory() {
@@ -80,7 +80,8 @@ export default function AddStory() {
     try {
       showLocalNotification("🙌 Ada story baru ditambahkan!")
       msgEl.innerHTML = `<div class="center">Mengirim...</div>`;
-      const res = await postStory(formData);
+      const res = await apiPostStory(formData);
+      console.log(res) // debug after post story 
 
       if (res && !res.error) {
         alert("✅ Story berhasil ditambahkan!");

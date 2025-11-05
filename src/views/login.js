@@ -1,4 +1,5 @@
 // src/views/login.js
+
 import { apiLogin } from "../utils/api";
 
 export default function Login() {
@@ -35,6 +36,7 @@ export default function Login() {
         localStorage.setItem("user", res.loginResult.name);
         localStorage.setItem("userEmail", email); // ✅ simpan email user
         // simpan nama user jika ada
+       
         if (res.loginResult.name)
           localStorage.setItem("user", res.loginResult.name);
 
