@@ -1,6 +1,7 @@
 // views/home.js
 import { apiGetStories } from '../utils/api';
 import StoryCard from '../components/storyCard';
+import { getStories } from '../utils/db';
 
 export default function Home() {
   const el = document.createElement('section');
@@ -60,6 +61,7 @@ export default function Home() {
       console.error(err);
     }
   }, 60);
+  
 
   return el;
 }

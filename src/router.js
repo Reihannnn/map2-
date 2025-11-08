@@ -5,6 +5,7 @@ import Header from './components/header';
 import Login from './views/login';
 import Register from './views/register';
 
+
 const routes = {
   '/': Home,
   '/map': MapView,

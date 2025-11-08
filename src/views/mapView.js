@@ -1,7 +1,8 @@
 // views/mapView.js
 import { apiGetStories } from '../utils/api';
 
-export default function MapView() {
+export default async function MapView() {
+  
   const el = document.createElement('section');
   el.className = 'container';
   el.innerHTML = `
@@ -39,9 +40,11 @@ export default function MapView() {
     }
   }, 40);
 
+  
   return el;
 }
 
 function escapeHtml(s='') {
   return (s+'').replace(/[&<>"']/g, c=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
