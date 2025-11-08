@@ -1,23 +1,17 @@
-export function openDB() {
+// idb.js
+const DB_NAME = 'stories-db';
+const STORE_NAME = 'stories';
+const DB_VERSION = 1;
+
+// buka / buat database
+function openDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open('UserDB', 3); // ⬅️ Naikkan versi (misal dari 2 ke 3)
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = (e) => {
       const db = e.target.result;
-
-      // store untuk users
-      if (!db.objectStoreNames.contains('users')) {
-        db.createObjectStore('users', { keyPath: 'email' });
-      }
-
-      // store untuk stories
-      if (!db.objectStoreNames.contains('stories')) {
-        const storyStore = db.createObjectStore('stories', {
-          keyPath: 'id',
-          autoIncrement: true
-        });
-        // tambahkan index biar bisa filter by user
-        storyStore.createIndex('by_user', 'userEmail', { unique: false });
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
       }
     };
 
@@ -26,64 +20,28 @@ export function openDB() {
   });
 }
 
-// Tambah user baru (register)
-export async function addUser(user) {
+// simpan banyak story
+export async function saveStories(stories) {
   const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction('users', 'readwrite');
-    const store = tx.objectStore('users');
-    const req = store.add(user);
-
-    req.onsuccess = () => resolve(true);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-// Cari user berdasarkan email (untuk login)
-export async function getUserByEmail(email) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction('users', 'readonly');
-    const store = tx.objectStore('users');
-    const req = store.get(email);
-
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-// --- STORY OPERATIONS ---
-// Tambah story baru
-export async function addStory(story) {
-  const db = await openDB();
-  const tx = db.transaction('stories', 'readwrite');
-  const store = tx.objectStore('stories');
-  store.add(story);
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  stories.forEach((story) => store.put(story));
   return tx.complete;
 }
 
-// Ambil semua story
-export async function getAllStories() {
+// ambil semua story dari IndexedDB
+export async function getStories() {
   const db = await openDB();
-  const tx = db.transaction('stories', 'readonly');
-  const store = tx.objectStore('stories');
-  return new Promise((resolve, reject) => {
-    const req = store.getAll();
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const store = tx.objectStore(STORE_NAME);
+  return store.getAll();
 }
 
-// Ambil story milik user tertentu
-export async function getStoriesByUser(email) {
+// hapus semua story (opsional, buat refresh)
+export async function clearStories() {
   const db = await openDB();
-  const tx = db.transaction('stories', 'readonly');
-  const store = tx.objectStore('stories');
-  const index = store.index('by_user');
-
-  return new Promise((resolve, reject) => {
-    const req = index.getAll(email);
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  store.clear();
+  return tx.complete;
 }

@@ -1,4 +1,5 @@
 import { subscribeUser } from "../../registerNotification";
+import { saveStories } from "./db";
 // import { addStory } from "./db";
 // // take data from indexed db
 // import { getUserByEmail } from "./db";
@@ -53,7 +54,7 @@ export async function apiLogin(email, password) {
   if (!data.error) {
     localStorage.setItem("token", data.loginResult.token);
     localStorage.setItem("userName", data.loginResult.name);
-    subscribeUser()
+    subscribeUser();
   }
 
   return data;
@@ -62,7 +63,7 @@ export async function apiLogin(email, password) {
 // apiPostStory with authentication
 export async function apiPostStory(formData) {
   const token = localStorage.getItem("token");
-  const url_enpoint = token ? `/v1/stories` : `/v1/stories/guest`; // ternary operator for have account of guest 
+  const url_enpoint = token ? `/v1/stories` : `/v1/stories/guest`; // ternary operator for have account of guest
 
   const res = await fetch(`${API_BASE}${url_enpoint}`, {
     method: "POST",
@@ -78,9 +79,8 @@ export async function apiPostStory(formData) {
 // post story guest `API` ==>  'https://story-api.dicoding.dev/v1/stories/guest'
 // apiPostStroy without authentication
 
-
 export async function apiGetStories({ page, size, location } = {}) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   // Susun URL dasar
   let url = `${API_BASE}/v1/stories`;
@@ -101,9 +101,13 @@ export async function apiGetStories({ page, size, location } = {}) {
 
   if (!res.ok) throw new Error("Gagal mengambil stories");
   const data = await res.json();
+
+  if (data.listStory && data.listStory.length > 0) {
+    await saveStories(data.listStory || []);
+  }
+
   return data;
 }
-
 
 export async function apiGetStoriesSpecific(id) {
   const token = localStorage.getItem("token");
