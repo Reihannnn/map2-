@@ -120,7 +120,7 @@
       <div class="features">
         <h3>Fitur yang Tetap Bisa Digunakan:</h3>
         <ul>
-          <li>Melihat data0 stories yang sudah di-cache</li>
+          <li>Melihat data stories yang sudah di-cache</li>
           <li>Navigasi halaman yang sudah dikunjungi</li>
           
         </ul>
@@ -136,7 +136,7 @@
       });
 
       document.addEventListener("DOMContentLoaded", async () => {
-        const stories = await getAllStories();
+        const stories = await getStories();
         console.log(stories);
       });
 
