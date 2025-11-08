@@ -267,7 +267,61 @@
       <div id="storiesContainer" style="display: none;"></div>
     </div>
 
-    <script type="module">
+    <script>
+      // ==========================================
+      // 🗄️ IndexedDB Functions (embedded)
+      // ==========================================
+      const DB_NAME = 'stories-db';
+      const STORE_NAME = 'stories';
+      const DB_VERSION = 1;
+
+      // Buka / buat database
+      function openDB() {
+        return new Promise((resolve, reject) => {
+          const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+          request.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+              db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            }
+          };
+
+          request.onsuccess = (e) => resolve(e.target.result);
+          request.onerror = (e) => reject(e.target.error);
+        });
+      }
+
+      // Ambil semua story dari IndexedDB
+      async function getStories() {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readonly');
+          const store = tx.objectStore(STORE_NAME);
+          const request = store.getAll();
+          
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+      }
+
+      // Hapus semua story
+      async function clearStories() {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+          const tx = db.transaction(STORE_NAME, 'readwrite');
+          const store = tx.objectStore(STORE_NAME);
+          const request = store.clear();
+          
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+      }
+
+      // ==========================================
+      // 🌐 Connection & Page Logic
+      // ==========================================
+      
       // Auto-reload when back online
       window.addEventListener("online", () => {
         window.location.reload();
@@ -288,10 +342,8 @@
         const totalStoriesEl = document.getElementById("totalStories");
 
         try {
-          // Import fungsi dari db.js
-          const { getStories, clearStories } = await import("./src/utils/db.js");
+          // Ambil stories dari IndexedDB (fungsi sudah embedded di atas)
           
-          // Ambil stories dari IndexedDB
           const stories = await getStories();
           
           // 📦 Console.log untuk debugging
