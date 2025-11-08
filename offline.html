@@ -289,7 +289,7 @@
 
         try {
           // Import fungsi dari db.js
-          const { getStories, clearStories } = await import("./utils/db.js");
+          const { getStories, clearStories } = await import("./src/utils/db.js");
           
           // Ambil stories dari IndexedDB
           const stories = await getStories();
