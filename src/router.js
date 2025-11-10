@@ -1,21 +1,23 @@
-import Home from './views/home';
-import MapView from './views/mapView';
-import AddStory from './views/addStory';
-import Header from './components/header';
-import Login from './views/login';
-import Register from './views/register';
-
+import Home from "./views/home";
+import MapView from "./views/mapView";
+import AddStory from "./views/addStory";
+import Header from "./components/header";
+import Login from "./views/login";
+import Register from "./views/register";
+import { Favorites } from "./views/saveStory";
 
 const routes = {
-  '/': Home,
-  '/map': MapView,
-  '/add': AddStory,
-  '/login': Login,
-  '/register': Register,
+  "/": Home,
+  "/map": MapView,
+  "/add": AddStory,
+  "/login": Login,
+  "/register": Register,
+  "/favorites": Favorites
+  ,
 };
 
-const appHeader = document.getElementById('app-header');
-const appMain = document.getElementById('maincontent');
+const appHeader = document.getElementById("app-header");
+const appMain = document.getElementById("maincontent");
 
 export function initRouter() {
   // Render header hanya sekali
@@ -25,16 +27,16 @@ export function initRouter() {
   }
 
   // Jalankan render pertama kali
-  window.addEventListener('load', renderRoute);
+  window.addEventListener("load", renderRoute);
   // Jalankan tiap hash berubah
-  window.addEventListener('hashchange', renderRoute);
+  window.addEventListener("hashchange", renderRoute);
 
   // Fokuskan main setiap navigasi link
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[data-link]');
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[data-link]");
     if (a) {
       setTimeout(() => {
-        const main = document.getElementById('maincontent');
+        const main = document.getElementById("maincontent");
         if (main) main.focus();
       }, 50);
     }
@@ -42,9 +44,9 @@ export function initRouter() {
 }
 
 function getPath() {
-  const hash = location.hash || '#/';
-  const path = hash.replace('#', '').split('?')[0];
-  return path || '/';
+  const hash = location.hash || "#/";
+  const path = hash.replace("#", "").split("?")[0];
+  return path || "/";
 }
 
 let currentViewEl = null;
@@ -56,27 +58,26 @@ export function renderRoute() {
   // 🌈 Gunakan View Transition API (bisa jalan di Chrome 111+)
   const transition = document.startViewTransition
     ? document.startViewTransition(() => {
-        appMain.innerHTML = '';
+        appMain.innerHTML = "";
         const viewEl = View();
         appMain.appendChild(viewEl);
         currentViewEl = viewEl;
-        viewEl.classList.add('view-enter');
+        viewEl.classList.add("view-enter");
         requestAnimationFrame(() => {
-          viewEl.classList.add('view-enter-active');
+          viewEl.classList.add("view-enter-active");
         });
       })
     : null;
 
   // fallback untuk browser yang belum mendukung
   if (!transition) {
-    appMain.innerHTML = '';
+    appMain.innerHTML = "";
     const viewEl = View();
     appMain.appendChild(viewEl);
     currentViewEl = viewEl;
-    viewEl.classList.add('view-enter');
+    viewEl.classList.add("view-enter");
     requestAnimationFrame(() => {
-      viewEl.classList.add('view-enter-active');
+      viewEl.classList.add("view-enter-active");
     });
   }
 }
-

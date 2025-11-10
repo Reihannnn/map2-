@@ -1,5 +1,5 @@
 import { subscribeUser } from "../../registerNotification";
-import { saveStories } from "./db";
+import { saveStories, getStories } from "./db";
 // import { addStory } from "./db";
 // // take data from indexed db
 // import { getUserByEmail } from "./db";
@@ -102,9 +102,9 @@ export async function apiGetStories({ page, size, location } = {}) {
   if (!res.ok) throw new Error("Gagal mengambil stories");
   const data = await res.json();
 
-  if (data.listStory && data.listStory.length > 0) {
-    await saveStories(data.listStory || []);
-  }
+  // if (data.listStory && data.listStory.length > 0) {
+  //   await saveStories(data.listStory || []);
+  // }
 
   return data;
 }
@@ -118,6 +118,19 @@ export async function apiGetStoriesSpecific(id) {
   const data = await res.json();
   return data;
 }
+
+// export async function apiDeleteStoriesSpecific(id) {
+//   const token = localStorage.getItem("token");
+//   const res = await fetch(`${API_BASE}/v1/stories/${id}`, {
+//     method: "DELETE",
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   const data = await res.json();
+//   return data;
+// }
 
 // Helper konversi file ke base64
 // function fileToBase64(file) {

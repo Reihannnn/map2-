@@ -1,0 +1,9 @@
+{
+  "name": "MAP App",
+  "short_name": "MAP",
+  "description": "A progressive web app with offline and install support.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e88e5"
+}

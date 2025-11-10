@@ -19,8 +19,14 @@ export default function AddStory() {
       <div class="form-row">
         <label>Lokasi (klik pada peta untuk memilih)</label>
         <div id="mini-map" style="height:240px;border:1px solid #e6edf2;border-radius:6px"></div>
-        <input id="lat" name="lat" type="text" placeholder="latitude" readonly />
-        <input id="lon" name="lon" type="text" placeholder="longitude" readonly />
+        <div style = "display:flex; flex-direction:column; gap:5px; ">
+          <label for="lat" >latitude</label>
+          <input id="lat" name="lat" type="text" placeholder="latitude" readonly />
+        </div>
+        <div style = "display:flex; flex-direction:column; gap:5px; ">
+          <label for="lon">longitude</label>
+          <input id="lon" name="lon" type="text" placeholder="longitude" readonly />
+        </div>
       </div>
       <div class="form-row">
         <button type="submit">Kirim Story</button>

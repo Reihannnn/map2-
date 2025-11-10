@@ -21,21 +21,50 @@ function openDB() {
 }
 
 // simpan banyak story
+// idb.js
 export async function saveStories(stories) {
+  // Validasi input
+  if (!stories || !Array.isArray(stories) || stories.length === 0) {
+    console.warn('saveStories: Input tidak valid', stories);
+    return;
+  }
+
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   const store = tx.objectStore(STORE_NAME);
-  stories.forEach((story) => store.put(story));
-  return tx.complete;
+  
+  stories.forEach((story) => {
+    if (story && story.id) { // pastikan story valid
+      store.put(story);
+    }
+  });
+  
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
 }
 
 // ambil semua story dari IndexedDB
+// export async function getStories() {
+//   const db = await openDB();
+//   const tx = db.transaction(STORE_NAME, 'readonly');
+//   const store = tx.objectStore(STORE_NAME);
+//   return store.getAll();  
+// }
+
 export async function getStories() {
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readonly');
   const store = tx.objectStore(STORE_NAME);
-  return store.getAll();
+
+  return new Promise((resolve, reject) => {
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
+  });
 }
+
 
 // hapus semua story (opsional, buat refresh)
 export async function clearStories() {
