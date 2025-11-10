@@ -2,12 +2,17 @@
 import { apiGetStories } from "../utils/api";
 import StoryCard from "../components/storyCard";
 import { saveStories, getStories } from "../utils/db";
+import { showLocalNotification } from "../utils/showNotification";
+import belIcon from "../image/bel.png";
+import tandaSeruIcon from "../image/tanda-seru.png";
+import { subscribeUser, unsubscribeUser } from "../../registerNotification";
 
 export default function Home() {
   const el = document.createElement("section");
   el.className = "container";
   el.innerHTML = `
     <h1>Home</h1>
+    
     <p>Daftar Story dengan peta singkat. Klik marker pada panel kanan untuk melihat lokasi.</p>
     <div class="grid">
       <div id="list" aria-live="polite"></div>
@@ -16,6 +21,47 @@ export default function Home() {
       </div>
     </div>
   `;
+
+
+  //  const notifButton = el.querySelector("#active-notifikasi");
+
+  // if (notifButton) {
+  // // 🔹 Cek status notifikasi terakhir dari localStorage
+  // const savedNotifStatus = localStorage.getItem("notifActive") === "true";
+
+  // notifButton.dataset.active = savedNotifStatus ? "true" : "false";
+  // notifButton.innerHTML = savedNotifStatus
+  //   ? `<div style="display:flex; align-items:center; gap:8px;">
+  //        Nonaktifkan Notifikasi <img src="${tandaSeruIcon}" />
+  //      </div>`
+  //   : `<div style="display:flex; align-items:center; gap:8px;">
+  //        Aktifkan Notifikasi <img src="${belIcon}" />
+  //      </div>`;
+
+  // notifButton.addEventListener("click", () => {
+    // const isActive = notifButton.dataset.active === "true";
+
+    // if (isActive) {
+    //   unsubscribeUser();
+    //   notifButton.dataset.active = "false";
+    //   notifButton.innerHTML = `
+    //     <div style="display:flex; align-items:center; gap:8px;">
+    //       Aktifkan Notifikasi <img src="${belIcon}" />
+    //     </div>
+    //   `;
+    //   localStorage.setItem("notifActive", "false"); // 🔹 simpan status
+    // } else {
+    //   subscribeUser();
+    //   notifButton.dataset.active = "true";
+    //   notifButton.innerHTML = `
+    //     <div style="display:flex; align-items:center; gap:8px;">
+    //       Nonaktifkan Notifikasi <img src="${tandaSeruIcon}" />
+    //     </div>
+    //   `;
+    //   localStorage.setItem("notifActive", "true"); // 🔹 simpan status
+    // }
+  // });
+// }
 
   setTimeout(async () => {
     const listEl = el.querySelector("#list");
@@ -74,12 +120,13 @@ export default function Home() {
             );
 
             if (alreadySavedNow) {
-              alert("Story ini sudah ada di daftar favorit!");
+              showLocalNotification("story ini sudah ada di database");
             } else {
               await saveStories([s]);
               favBtn.textContent = "❤️";
               favBtn.disabled = true;
               favBtn.style.opacity = "0.6";
+              showLocalNotification("story berhasil disimpan ke indexedDB");
               console.log(`Story "${s.name}" (${s.id}) disimpan ke IndexedDB`);
             }
           } catch (err) {
@@ -92,6 +139,7 @@ export default function Home() {
         const deleteBtn = actionDiv.querySelector(".delete-btn");
         deleteBtn.addEventListener("click", () => {
           card.remove();
+          showLocalNotification("story berhasil dihapus");
           if (s.lat && s.lon) {
             const markerToRemove = markers.find((m) => {
               const pos = m.getLatLng();

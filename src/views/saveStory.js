@@ -1,5 +1,7 @@
 import { getStories } from "../utils/db";
 import "../styles/favorite.css";
+import { showLocalNotification } from "../utils/showNotification";
+
 
 async function deleteStory(id) {
   return new Promise((resolve, reject) => {
@@ -119,6 +121,7 @@ async function loadFavorites() {
           await new Promise((resolve) => setTimeout(resolve, 300));
           await deleteStory(id);
           card.remove();
+          showLocalNotification("story berhasil di hapus dari indexedDB")
 
           console.log(`Story ${id} berhasil dihapus`);
 

@@ -54,7 +54,6 @@ export async function apiLogin(email, password) {
   if (!data.error) {
     localStorage.setItem("token", data.loginResult.token);
     localStorage.setItem("userName", data.loginResult.name);
-    subscribeUser();
   }
 
   return data;

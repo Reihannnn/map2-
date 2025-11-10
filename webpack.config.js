@@ -55,7 +55,9 @@ devServer: {
     new CopyWebpackPlugin({
     patterns: [
       { from: "service-worker.js", to: "" },
-      { from: "offline.html", to: "" }
+      { from: "offline.html", to: "" },
+      { from: "manifest.json", to: "" },
+        { from: "src/image", to: "image" } 
     ]
   })
   ],

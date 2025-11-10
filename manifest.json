@@ -1,9 +1,25 @@
 {
-  "name": "MAP App",
-  "short_name": "MAP",
-  "description": "A progressive web app with offline and install support.",
-  "start_url": "./index.html",
+  "name": "StoryMapApp - Peta Cerita Lokasi",
+  "short_name": "StoryMap",
+  "description": "Aplikasi berbagi cerita dengan peta lokasi",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1e88e5"
+  "theme_color": "#1e88e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/image/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/image/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

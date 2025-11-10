@@ -12,6 +12,5 @@ export async function showLocalNotification(title, body) {
   const registration = await navigator.serviceWorker.ready;
   registration.showNotification(title, {
     body,
-    icon: '/icons/icon-192.png' // optional, sesuaikan kalau ada
   });
 }

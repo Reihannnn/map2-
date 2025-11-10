@@ -21,7 +21,7 @@ export default function Header() {
       </div>
 
       <nav class="app-nav" aria-label="Navigasi utama" style="display:flex;gap:16px;align-items:center;">
-        <a href="#/favorites" data-link style="color:white;text-decoration:none;">simpan</a>
+        <a href="#/favorites" data-link style="color:white;text-decoration:none;">Favorite</a>
         <a href="#/" data-link style="color:white;text-decoration:none;">Home</a>
         <a href="#/map" data-link style="color:white;text-decoration:none;">Map</a>
         <a href="#/add" data-link style="color:white;text-decoration:none;">Tambah Story</a>
